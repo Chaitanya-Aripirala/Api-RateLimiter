@@ -23,7 +23,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: '*', // Allow all origins for testing
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'Retry-After']
 }));
 app.use(morgan('dev'));
 app.use(express.json());
