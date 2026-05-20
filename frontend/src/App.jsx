@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 function App() {
+  const API_BASE = 'https://api-ratelimiter.onrender.com';
   const [token, setToken] = useState('');
   const [email, setEmail] = useState('test@example.com');
   const [password, setPassword] = useState('password123');
@@ -13,7 +14,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/users/signin', {
+      const res = await fetch(`${API_BASE}/api/users/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -37,7 +38,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/users/signup', {
+      const res = await fetch(`${API_BASE}/api/users/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: 'User', email, password, mobile: '1234567890' }),
@@ -64,7 +65,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/${endpoint}`, {
+      const res = await fetch(`${API_BASE}/api/${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
