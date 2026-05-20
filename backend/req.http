@@ -1,0 +1,85 @@
+### API Rate Limiter Testing - User Authenticated Flow
+@baseUrl = http://localhost:4000/api
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGM5YTZjZWFiYzhiMDhkMjU0NmY4OCIsImlhdCI6MTc3OTIxMDg2MCwiZXhwIjoxNzgxODAyODYwfQ.NsJIne5b3xdCFMgEC0xCbOMt9NSUsReBjM0p9xNglYE
+
+############################################################
+# 1. AUTHENTICATION (Prerequisite for Rate Limiting)
+############################################################
+
+### User Signup
+POST {{baseUrl}}/users/signup
+Content-Type: application/json
+
+{
+    "name": "user",
+    "email": "user@gmail.com",
+    "password": "password123",
+    "mobile": "1234567890"
+}
+
+### User Signin
+# Copy the token from response and update @token variable
+POST {{baseUrl}}/users/signin
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "password123"
+}
+
+
+# 2. PROTECTED RATE LIMITING ALGORITHMS
+# (Must send Authorization: Bearer <token>)
+
+### Fixed Window Limiter (User-Based)
+GET {{baseUrl}}/fixed
+Authorization: Bearer {{token}}
+
+### Sliding Window Limiter (User-Based)
+GET {{baseUrl}}/sliding
+Authorization: Bearer {{token}}
+
+### Token Bucket Limiter (User-Based)
+GET {{baseUrl}}/token
+Authorization: Bearer {{token}}
+
+### Leaky Bucket Limiter (User-Based)
+GET {{baseUrl}}/leaky
+Authorization: Bearer {{token}}
+
+
+
+
+
+############################################################
+# 4. USER APIs (Protected)
+############################################################
+
+### Get All Users
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Update Profile
+PUT {{baseUrl}}/users/REPLACE_WITH_USER_ID
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "mobile": "1112223334"
+}
+
+
+############################################################
+# 5. ADMIN & ANALYTICS (Protected)
+############################################################
+
+### Fetch Audit Logs
+GET {{baseUrl}}/logs?limit=10
+Authorization: Bearer {{token}}
+
+### Get Real-time Stats
+GET {{baseUrl}}/stats
+Authorization: Bearer {{token}}
+
+### Health Check (Public)
+GET http://localhost:4000/
